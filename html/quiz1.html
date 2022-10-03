@@ -1,0 +1,46 @@
+<h2>[10] Quiz 2: SQL Basics</h2>
+<h3>[7] Question 1:</h3>
+<pre><code>  SELECT Player, Team, Height
+    FROM NBAPlayers
+   WHERE Height &gt; (SELECT avg(Height) 
+                     FROM NBAPlayers)
+</code></pre>
+<ul>
+<li>[+7] Correct</li>
+<li>[2] SELECT
+<ul>
+<li>[+2] <code>SELECT Player, Team, Height</code></li>
+<li>[-0.5] Missing one column</li>
+<li>[-1.5] Missing two columns</li>
+</ul>
+</li>
+<li>[+1] <code>FROM NBAPlayers</code></li>
+<li>[+1] <code>WHERE Height &gt;</code></li>
+<li>[3] Subquery
+<ul>
+<li>[+1] <code>SELECT AVG(height)</code></li>
+<li>[+2] <code>FROM NBAPlayers</code></li>
+</ul>
+</li>
+<li>[0] Incorrect</li>
+</ul>
+<h3>[1] Question 2:</h3>
+<pre><code>  GSW, 198
+  LAL, 208
+</code></pre>
+<ul>
+<li>[+1] Correct</li>
+<li>[+0.5] Has <code>GSW, 198</code></li>
+<li>[+0.5] Has <code>LAL, 208</code></li>
+</ul>
+<h3>[2] Question 3:</h3>
+<pre><code>  SELECT Team, MAX(Height)
+    FROM NBAPlayers
+   GROUP BY Team
+</code></pre>
+<ul>
+<li>[+2] Correct</li>
+<li>[+1] <code>SELECT Team, max(Height) FROM NBAPlayers</code></li>
+<li>[+1] <code>GROUP BY Team</code></li>
+<li>[+0] Incorrect</li>
+</ul>
