@@ -1,0 +1,17 @@
+<h2>[10] Quiz 2</h2>
+<pre><code>SELECT artist, SUM(streams)
+  FROM Songstreams
+ WHERE (year=2020) AND (platform='AppleMusic')
+ GROUP BY artist
+HAVING SUM(streams)&gt;10000000
+ ORDER BY SUM(streams) DESC
+</code></pre>
+<h3>[10] SELECT &amp; FROM</h3>
+<ul>
+<li>[1] <code>SELECT artist, SUM(streams)</code></li>
+<li>[1] <code>FROM Songstreams</code></li>
+<li>[2] <code>WHERE (year = 2020) AND (platform='AppleMusic')</code></li>
+<li>[2] <code>GROUP BY artist</code></li>
+<li>[2] <code>HAVING SUM(streams)&gt;10000000</code></li>
+<li>[2] <code>ORDER BY SUM(streams) DESC</code></li>
+</ul>
