@@ -1,4 +1,4 @@
-## [10] Quiz 2: SQL Basics 
+## [10] Quiz 1: SQL Basics 
 
 ### [7] Question 1:
 ```
