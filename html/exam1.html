@@ -1,0 +1,127 @@
+<h2>[73] Exam 1 Rubric</h2>
+<h3>[7] Question 1</h3>
+<pre><code>SELECT customer_id, SUM(quantity*unit_cost)
+  FROM Purchases
+ WHERE unit_cost &gt;= 1.00
+ GROUP BY customer_id
+HAVING SUM(quantity*unit_cost) &gt;= 1000
+ ORDER BY SUM DESC
+ LIMIT 5
+</code></pre>
+<ul>
+<li>[+1] Has <code>SELECT customer_id, SUM(quantity*unit_cost)</code></li>
+<li>[+1] Has <code>FROM Purchases</code></li>
+<li>[+1] Has <code>WHERE unit_cost &gt;= 1.00</code></li>
+<li>[+1] Has <code>GROUP BY customer_id</code></li>
+<li>[+1] Has <code>HAVING SUM(quantity*unit_cost) &gt;= 1000</code></li>
+<li>[+1] Has <code>ORDER BY SUM DESC</code></li>
+<li>[+1] Has <code>LIMIT 5</code></li>
+<li>[-0.5] Improper use of <code>HAVING</code>/<code>WHERE</code> (Non-aggregate in <code>HAVING</code>, vice-versa)</li>
+</ul>
+<h3>[12] Question 2a</h3>
+<pre><code>SELECT s1.name, s2.name, t.cid
+  FROM Students as s1
+       JOIN Students as s2 on s1.sid &lt; s2.sid
+       JOIN Takes as t1 on (t1.sid = s1.sid) 
+       JOIN Takes as t2 on (t2.sid = s2.sid)
+ WHERE t1.cid = t2.cid
+</code></pre>
+<ul>
+<li>[+3] Has <code>SELECT s1.name, s2.name, t.cid</code></li>
+<li>[+1] Has <code>FROM</code> (Students or Takes)</li>
+<li>[+2] Has <code>s1.sid = s2.sid</code> check</li>
+<li>[+2] Has <code>t1.sid = s1.sid</code> check</li>
+<li>[+2] Has <code>t2.sid = t2.sid</code> check</li>
+<li>[+2] Has <code>t1.cid = t2.cid</code> check</li>
+<li>[-0] Checks can take place in <code>WHERE</code> or <code>JOIN</code></li>
+<li>[-0.5] Improper use of <code>HAVING</code>/<code>WHERE</code> (Non-aggregate in <code>HAVING</code>, vice-versa)</li>
+</ul>
+<h3>[7] Question 2b</h3>
+<pre><code>CREATE TABLE Course_Counts AS
+    SELECT c.cid, COUNT(t.sid)
+      FROM Courses as c
+           JOIN Takes as t on c.cid = t.cid
+     GROUP BY c.cid
+</code></pre>
+<ul>
+<li>[+2] Has <code>SELECT c.cid, COUNT(t.sid)</code></li>
+<li>[+1] Has <code>FROM</code> (Course or Takes)</li>
+<li>[+2] Joins Courses &amp; Takes together on c.cid = t.cid</li>
+<li>[+2] Has <code>GROUP BY c.cid</code></li>
+</ul>
+<h3>[13] Question 2c</h3>
+<pre><code>SELECT c.cid, c.name, COUNT(t.sid)
+  FROM Courses as c
+       JOIN Takes as t on c.cid = t.cid
+ GROUP BY c.cid, c.name
+HAVING COUNT(t.sid) = (SELECT MAX(count) FROM Course_Counts)
+</code></pre>
+<ul>
+<li>[+3] Has <code>SELECT c.cid, c.name, COUNT(t.sid)</code></li>
+<li>[+1] Has <code>FROM</code> (Course or Takes)</li>
+<li>[+2] Joins Courses &amp; Takes together on c.cid = t.cid</li>
+<li>[+1] Groups by c.cid</li>
+<li>[+2] Groups by c.name</li>
+<li>[+2] Has <code>HAVING COUNT(t.sid) = ...</code></li>
+<li>[+2] Has Subquery: <code>(SELECT max(count) FROM Course_Counts)</code></li>
+<li>[-1] Puts <code>HAVING</code> check under <code>WHERE</code></li>
+</ul>
+<h3>[4] Question 3a</h3>
+<pre><code>CREATE TABLE Highest_Earnings as 
+    SELECT a.year, MAX(a.earnings)
+      FROM Athletes as a
+     GROUP BY a.year
+</code></pre>
+<ul>
+<li>[+2] Has <code>SELECT a.year, MAX(a.earnings)</code></li>
+<li>[+2] Has <code>GROUP BY a.year</code></li>
+</ul>
+<h3>[14] Question 3b</h3>
+<pre><code>SELECT a.name, COUNT(a.year)
+  FROM Athletes as a
+       JOIN Highest_Earnings  as h
+         ON (a.year = h.year) AND 
+            (a.earnings = h.max)
+ GROUP BY a.name
+HAVING COUNT(a.year) &gt; 1
+ ORDER BY COUNT DESC, name ASC
+</code></pre>
+<ul>
+<li>[+2] Has <code>SELECT a.name, COUNT(a.year)</code></li>
+<li>[+1] Has <code>FROM</code> (Athletes or Highest_Earnings)</li>
+<li>[+1] Joins other Table (Highest_Earnings or Athletes)</li>
+<li>[+2] Checks for (a.year = h.year)</li>
+<li>[+2] Checks for a.earnings = h.max</li>
+<li>[+2] <code>GROUP BY a.name</code></li>
+<li>[+2] Has <code>HAVING COUNT(a.year) &gt; 1</code></li>
+<li>[+1] Orders by COUNT DESC</li>
+<li>[+1] Orders by Name ASC</li>
+<li>[-0] Checks can take place in <code>WHERE</code> or <code>JOIN</code></li>
+<li>[-0] Does not specifically state ASC for Name</li>
+<li>[-1] Puts <code>HAVING</code> check under <code>WHERE</code></li>
+</ul>
+<h3>[16] Question 4</h3>
+<pre><code>SELECT r1.restaurant_id, COUNT(r1.patron_id)
+  FROM Ratings as r1
+ WHERE r1.rating = 'Excellent'
+ GROUP BY restaurant_id
+HAVING COUNT(r1.rating) = (SELECT COUNT(r2.rating)
+                             FROM Restaurants as r2
+                            WHERE r2.restaurant_id = r1.restaurant_id)
+</code></pre>
+<ul>
+<li>[+1] Selects r1.restaurant_id</li>
+<li>[+2] Selects COUNT(r1.patron_id)</li>
+<li>[+1] Has <code>FROM Rating as r1</code></li>
+<li>[+2] Has <code>WHERE r1.rating = 'Excellent'</code></li>
+<li>[+3] Has <code>GROUP BY restaurant_id</code></li>
+<li>[+2] Has <code>HAVING COUNT(r1.rating) = ...</code></li>
+<li>[+5] Subquery
+<ul>
+<li>[+2] Has <code>SELECT COUNT(r2.rating)</code></li>
+<li>[+1] Has <code>FROM Restaurants as r2</code></li>
+<li>[+2] Has <code>WHERE r2.restaurant_id = r1.restaurant_id</code></li>
+</ul>
+</li>
+<li>[-0.5] Per occurance of improper use of <code>WHERE</code>/<code>HAVING</code> (Non-aggregates in <code>HAVING</code>, vice-versa)</li>
+</ul>
